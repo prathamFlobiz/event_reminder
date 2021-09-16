@@ -15,17 +15,19 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         runnable = Runnable {
-                launchMainActivity()
+            launchMainActivity()
         }
         runnable?.let {
-            handler.postDelayed(it,5000)
+            handler.postDelayed(it, 5000)
         }
     }
+
     override fun onPause() {
         handler.removeCallbacksAndMessages(null)
         super.onPause()
     }
-    private fun launchMainActivity(){
+
+    private fun launchMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
