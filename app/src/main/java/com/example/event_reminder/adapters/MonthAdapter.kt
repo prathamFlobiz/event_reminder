@@ -8,11 +8,8 @@ import com.example.event_reminder.EventListFragment
 
 class MonthAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fm, lifecycle) {
-    override fun getItemCount(): Int {
-        return 12
-    }
+    override fun getItemCount() = 12
 
-    override fun createFragment(position: Int): Fragment {
-        return EventListFragment.newInstance(position + 1)
-    }
+    override fun createFragment(position: Int) =
+        EventListFragment.newInstance(position + 1)
 }

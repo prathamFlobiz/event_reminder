@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val months =
         arrayOf("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
     var calendar: Calendar = Calendar.getInstance()
-
+    private val notificationKey: String = "notification"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,23 +36,28 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = MonthAdapter(supportFragmentManager, lifecycle)
         viewPager.adapter = adapter
+        //setting up tab layout with viewpager
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = months[position]
         }.attach()
+        //setting current tab according to current month
         tabLayout.getTabAt(calendar.get(Calendar.MONTH))?.select()
+        //creating notification channel
         createChannel("channel", "Daily")
-        Log.d("NOTIFICATION", isNotificationSet().toString())
+
         if (!isNotificationSet())
             setupDailyNotification()
     }
 
+    /**
+     * Create Notification Channel with given channel Id, channel name
+     */
     private fun createChannel(channelId: String, channelName: String) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 channelId,
                 channelName,
-
                 NotificationManager.IMPORTANCE_HIGH
             )
             notificationChannel.enableLights(true)
@@ -68,12 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDailyNotification() {
-        //Setting Shared Preference
-        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putBoolean("notification", true)
-            apply()
-        }
+        setNotification()
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val contentIntent = Intent(applicationContext, AlarmReceiver::class.java)
         val contentPendingIntent = PendingIntent.getBroadcast(
@@ -82,16 +82,7 @@ class MainActivity : AppCompatActivity() {
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.HOUR, 0)
-        cal.set(Calendar.SECOND, 0)
-        cal.set(Calendar.MILLISECOND, 0)
-        cal.set(Calendar.HOUR_OF_DAY, 9)
-        cal.set(Calendar.MINUTE, 0)
-        if (cal.before(Calendar.getInstance())) {
-            cal.add(Calendar.DAY_OF_YEAR, 1);
-        }
-        Log.d("NOTIFICATION", "${cal.timeInMillis},${Calendar.getInstance().timeInMillis}")
+        val cal = getTodayCalender(9, 0)
         alarmManager.setWindow(
             AlarmManager.RTC_WAKEUP,
             cal.timeInMillis,
@@ -100,8 +91,32 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun isNotificationSet(): Boolean {
-        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
-        return sharedPref.getBoolean("notification", false)
+    /**
+     * Check if daily notification is set
+     */
+    private fun isNotificationSet() =
+        getPreferences(Context.MODE_PRIVATE).getBoolean(notificationKey, false)
+
+    private fun setNotification() {
+        with(getPreferences(Context.MODE_PRIVATE).edit()) {
+            putBoolean(notificationKey, true)
+            apply()
+        }
+    }
+
+    /**
+     * Returns today's Calender with given hour and minute.
+     */
+    private fun getTodayCalender(hour: Int, minute: Int): Calendar {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        cal.set(Calendar.HOUR_OF_DAY, hour)
+        cal.set(Calendar.MINUTE, minute)
+        if (cal.before(Calendar.getInstance())) {
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        return cal
     }
 }

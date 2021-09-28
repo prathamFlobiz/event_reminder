@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="10dp"
     android:backgroundTint="?attr/colorOnPrimary"
     android:padding="15dp"
     app:cardCornerRadius="15dp"
@@ -19,8 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:contentDescription="@string/todo"
             android:elevation="5dp" />
 
@@ -37,8 +42,8 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/textview"
                 android:textColor="?attr/colorOnSecondary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="19sp"
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/dateTextView"
@@ -48,7 +53,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/date"
-                android:textColor="?attr/colorOnSecondary"
+                android:textColor="@color/light_grey"
                 android:textSize="16sp" />
         </LinearLayout>
 

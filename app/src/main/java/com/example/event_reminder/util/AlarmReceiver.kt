@@ -19,8 +19,8 @@ class AlarmReceiver : BroadcastReceiver() {
     private val NOTIFICATION_ID = 0
 
     override fun onReceive(context: Context, intent: Intent) {
-        // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Log.d("NOTIFICATION", "Received")
+        //Setting daily notification recursively
         val alarmManager = context.getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
         val contentIntent = Intent(context, AlarmReceiver::class.java)
         val contentPendingIntent = PendingIntent.getBroadcast(
@@ -29,15 +29,7 @@ class AlarmReceiver : BroadcastReceiver() {
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.HOUR, 0)
-        cal.set(Calendar.SECOND, 0)
-        cal.set(Calendar.MILLISECOND, 0)
-        cal.set(Calendar.HOUR_OF_DAY, 9)
-        cal.set(Calendar.MINUTE, 0)
-        if (cal.before(Calendar.getInstance())) {
-            cal.add(Calendar.DAY_OF_YEAR, 1);
-        }
+        val cal = getTodayCalender(9,0)
         Log.d("NOTIFICATION", "${cal.timeInMillis},${Calendar.getInstance().timeInMillis}")
         alarmManager.setWindow(
             AlarmManager.RTC_WAKEUP,
@@ -64,11 +56,27 @@ class AlarmReceiver : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
             .setSmallIcon(R.drawable.img_birthday)
             .setContentTitle("Daily Events")
-            .setContentText("Remember to wish people who have events today!")
+            .setContentText(context.getString(R.string.notification_content_text))
             .setContentIntent(contentPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    /**
+     * Returns today's Calender with given hour and minute.
+     */
+    private fun getTodayCalender(hour : Int,minute : Int) : Calendar{
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        cal.set(Calendar.HOUR_OF_DAY, hour)
+        cal.set(Calendar.MINUTE, minute)
+        if (cal.before(Calendar.getInstance())) {
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        return cal
     }
 }
