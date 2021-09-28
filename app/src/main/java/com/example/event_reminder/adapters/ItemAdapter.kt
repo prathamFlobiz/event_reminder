@@ -1,6 +1,7 @@
 package com.example.event_reminder.adapters
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,18 +37,14 @@ class ItemAdapter(private val context: Context, private val dataset: List<Event>
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val event = dataset[position]
-        //getting Date in correct format
-        val eventDate: String = getDateString(event.day!!, event.month!!, event.year!!)
         holder.apply {
             personName.text = event.name
-            date.text = eventDate
+            //getting Date in correct format
+            date.text = getDateString(event.day!!, event.month!!, event.year!!)
             //calculating age according to event's day,month & year
             age.text = calculateAge(event.day!!, event.month!! - 1, event.year!!)
             //Setting image according to the event type
-            if (event.eventType == 1)
-                image.setImageDrawable(getDrawable(context, R.drawable.img_anniversary))
-            else
-                image.setImageDrawable(getDrawable(context, R.drawable.img_birthday))
+            image.setImageDrawable(getEventDrawable(event.eventType!!))
         }
     }
 
@@ -88,5 +85,15 @@ class ItemAdapter(private val context: Context, private val dataset: List<Event>
         )
             context.getString(R.string.today)
         else "${day}-${month}-${year}"
+    }
+
+    /**
+     * Returns Drawable according to event type
+     */
+    private fun getEventDrawable(eventType : Int) : Drawable? {
+        return if (eventType == 1)
+            getDrawable(context, R.drawable.img_anniversary)
+        else
+            getDrawable(context, R.drawable.img_birthday)
     }
 }
