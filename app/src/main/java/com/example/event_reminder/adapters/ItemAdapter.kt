@@ -18,10 +18,10 @@ class ItemAdapter(private val context: Context, private val dataset: List<Event>
     var onItemClick: ((Event) -> Unit)? = null
 
     inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val personName: TextView = view.findViewById(R.id.txt_name)
-        val date: TextView = view.findViewById(R.id.txt_date)
-        val age: TextView = view.findViewById(R.id.txt_age)
-        val image: ImageView = view.findViewById(R.id.imv_event)
+        val nameTextView: TextView = view.findViewById(R.id.txt_name)
+        val dateTextView: TextView = view.findViewById(R.id.txt_date)
+        val ageTextView: TextView = view.findViewById(R.id.txt_age)
+        val eventImageView: ImageView = view.findViewById(R.id.imv_event)
 
         init {
             view.setOnClickListener {
@@ -39,13 +39,13 @@ class ItemAdapter(private val context: Context, private val dataset: List<Event>
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val event = dataset[position]
         holder.apply {
-            personName.text = event.name
+            nameTextView.text = event.name
             //getting Date in correct format
-            date.text = getDateString(event.day!!, event.month!!, event.year!!)
+            dateTextView.text = getDateString(event.day!!, event.month!!, event.year!!)
             //calculating age according to event's day,month & year
-            age.text = calculateAge(event.day!!, event.month!! - 1, event.year!!)
-            //Setting image according to the event type
-            image.setImageDrawable(getEventDrawable(event.eventType!!))
+            ageTextView.text = calculateAge(event.day!!, event.month!! - 1, event.year!!)
+            //Setting eventImageView according to the event type
+            eventImageView.setImageDrawable(getEventDrawable(event.eventType!!))
         }
     }
 
@@ -82,7 +82,7 @@ class ItemAdapter(private val context: Context, private val dataset: List<Event>
     }
 
     /**
-     * Returns "Today" if the event date is of today and returns date is correct format otherwise.
+     * Returns "Today" if the event dateTextView is of today and returns dateTextView is correct format otherwise.
      */
     private fun getDateString(day: Int, month: Int, year: Int): String {
         val today: Calendar = Calendar.getInstance()
