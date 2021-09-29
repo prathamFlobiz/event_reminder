@@ -20,4 +20,5 @@
     <string name="no_error">No error</string>
     <string name="today">Today</string>
     <string name="notification_content_text">Remember to wish people who have events today!</string>
+    <string name="arg_old">%1$s old</string>
 </resources>

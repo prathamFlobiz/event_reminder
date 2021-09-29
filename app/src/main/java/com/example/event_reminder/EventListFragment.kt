@@ -34,7 +34,7 @@ class EventListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.event_list_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_event_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,10 +80,10 @@ class EventListFragment : Fragment() {
         val bottomSheet: BottomSheetDialog =
             BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialogTheme)
         bottomSheet.setContentView(R.layout.bottom_sheet_addevent)
-        val addButton: Button? = bottomSheet.findViewById(R.id.addButton)
-        val nameTextView: TextView? = bottomSheet.findViewById(R.id.name)
-        val dateTextView: TextView? = bottomSheet.findViewById(R.id.date)
-        val deleteImage: ImageView? = bottomSheet.findViewById(R.id.deleteImage)
+        val addButton: Button? = bottomSheet.findViewById(R.id.btn_add)
+        val nameTextView: TextView? = bottomSheet.findViewById(R.id.edt_name)
+        val dateTextView: TextView? = bottomSheet.findViewById(R.id.edt_date)
+        val deleteImage: ImageView? = bottomSheet.findViewById(R.id.imv_delete)
         val radioGroup: RadioGroup? = bottomSheet.findViewById(R.id.radioGroup)
         //if the user is updating an existing event
         if (actionType == ActionType.UPDATE) {
